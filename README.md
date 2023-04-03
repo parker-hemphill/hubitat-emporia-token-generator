@@ -15,12 +15,12 @@ services:
     container_name: hubitat-emporia-token-generator
     restart: unless-stopped
     environment:
-      emporia_username='<Username for Emporia site>'
-      emporia_password='<Password for Emporia>'
-      emporia_device_id='<Device ID for Emporia driver in Hubitat>'
-      hubitat_ip='<IP address of Hubitat>'
-      maker_api_id='<App ID for maker app in Hubitat>'
-      maker_api_token='<Token used by maker app in Hubitat>'
+      - emporia_username='<Username for Emporia site>'
+      - emporia_password='<Password for Emporia>'
+      - emporia_device_id='<Device ID for Emporia driver in Hubitat>'
+      - hubitat_ip='<IP address of Hubitat>'
+      - maker_api_id='<App ID for maker app in Hubitat>'
+      - maker_api_token='<Token used by maker app in Hubitat>'
     volumes:
       - /tmp:/tmp
 ```
