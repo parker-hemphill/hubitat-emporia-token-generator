@@ -1,0 +1,34 @@
+import argparse
+import json
+import logging
+import pyemvue
+import requests
+import time
+
+parser = argparse.ArgumentParser()
+parser.add_argument("emporia_username", type=str)
+parser.add_argument("emporia_password", type=str)
+parser.add_argument("emporia_device_id", type=str)
+parser.add_argument("hubitat_ip", type=str)
+parser.add_argument("maker_api_id", type=str)
+parser.add_argument("maker_api_token", type=str)
+args = parser.parse_args()
+
+logging.basicConfig(filename='/tmp/emporia.log', encoding='utf-8', level=logging.INFO)
+
+logging.info('Beginning loop')
+while True:
+  vue = pyemvue.PyEmVue()
+  auth = vue.login(username=args.emporia_username, password=args.emporia_password, token_storage_file='keys.json')
+
+  with open('keys.json')as f:
+    data = json.load(f)
+
+  token_id = data['id_token']
+  token_body = "http://" + args.hubitat_ip + "/apps/api/" + args.maker_api_id + "/devices/" + args.emporia_device_id + "/authToken/{}?access_token=" + args.maker_api_token
+  requests.get(token_body.format(token_id))
+  
+  logging.info('Updated token')
+  #print(f"Updated token at {time.strftime('%l:%M%p %Z on %b %d, %Y')}, sleeping for one hour")
+  logging.info('Sleeping 1 hour')
+  time.sleep(60*60) # 60 minutes
